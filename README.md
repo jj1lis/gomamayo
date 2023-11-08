@@ -1,0 +1,2 @@
+# gomamayo
+Gomamayo judgement program
