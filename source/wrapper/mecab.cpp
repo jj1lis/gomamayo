@@ -42,7 +42,7 @@ namespace gomamayo{
                     if(node->stat != MECAB_BOS_NODE && node->stat != MECAB_EOS_NODE){
                         auto splitted = split<char>(node->feature, ",");
 
-                        words->push_back(new Word<char>(new std::string(node->surface, node->length), &(splitted->at(6)), toPOS(splitted->at(0))));
+                        words->push_back(new Word<char>(new std::string(node->surface, node->length), &(splitted->at(7)), toPOS(splitted->at(0))));
                     }
 
                     node = node->next;
