@@ -7,21 +7,37 @@
 
 #pragma once
 
+#include <string>
+#include <vector>
+#include <algorithm>
+
 #include "core.hpp"
 
 namespace gomamayo{
 
-    // text が表す文章からn次ゴママヨを探す
-    // n == 0 の場合は無制限に探す
+    // text が表す文章から n 次ゴママヨを探す
     template<class charType, class traits = std::char_traits<charType>, class Allocator = std::allocator<charType>>
-        auto /* TODO write return type*/
-            judgeGomamayo(Text<charType> text, std::basic_string<charType>::size_type n = 0){
+        vector<Word<charType>::size_type>
+            judgeGomamayo(Text<charType> text, std::basic_string<charType>::size_type n = 1){
+
+                using String = basic_string<charType>;
+
+                // ゴママヨが見つかった単語のインデックス（前側）
+                vector<Word<charType>::size_type> gomamayoWordIndexes;
             
-                // i = 0...(size - 1) について、i番目とi+1番目の単語でゴママヨを探す
+                // i = 0...(size - 1) について、i 番目と i + 1 番目の単語でゴママヨを探す
                 for(std::vector<Word<charType>>::size_type i = 0; i < text.size() - 1; i++){
-                    //TODO 
+
+                    // i 番目の単語の末尾 n モーラ
+                    String now  = text[i].getMoraTail(n);
+                    // i + 1 番目の単語の先頭 n モーラ
+                    String next = text[i + 1].getMoraHead(n);
+
+                    // now と next が文字列として等しい <=> ゴママヨ発見
+                    if(now.compare(next) == 0)
+                        gomamayoWordIndexes.push_back(i);
                 }
              
-
+            return gomamayoWordIndexes;
         }
 }

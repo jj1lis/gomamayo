@@ -41,14 +41,38 @@ namespace gomamayo{
             Word(String word, String reading, POS pos) : word(word), reading(reading), moras(splitMora(reading)), pos(pos) {}
 
             // getter
-            POS                 getPos()        const { return pos; }
-            String              getWord()       const { return word; }
-            String              getReading()    const { return reading; }
-            std::vector<String> getMoras()      const { return moras; }
+            POS                         getPos()        const { return pos; }
+            const String&               getWord()       const { return &word; }
+            const String&               getReading()    const { return &reading; }
+            const std::vector<String>&  getMoras()      const { return &moras; }
 
+            // モーラのサイズを取得する
             std::vector<String>::size_type getMoraSize() const {
                 return moras.size();
             }
+
+            // 読みの先頭 length モーラを取得する
+            String getMoraHead(String::size_type length) const {
+                // length がモーラ数より大きければ例外を投げる
+                if(length > moras.size()) {
+                    // TODO 投げる例外クラスを作る
+                } 
+
+                // 先頭から length モーラを結合して返す
+                return std::accumulate(moras.begin(), moras.begin() + length, String());
+            }
+
+            // 読みの末尾 length モーラを取得する
+            String getMoraTail(String::size_type length) const {
+                // length がモーラ数より大きければ例外を投げる
+                if(length > moras.size()) {
+                    // TODO 投げる例外クラスを作る
+                } 
+
+                // 先頭から length モーラを結合して返す
+                return std::accumulate(moras.end() - length, moras.end(), String());
+            }
+
 
             private:
             const String word;                  // 単語（元の表現）
@@ -67,8 +91,21 @@ namespace gomamayo{
             public:
             Text(std::vector<CWord> words) : words(words) {}
 
-            std::vector<CWord> getWords()           const { return words; }
+            // getter
+            const std::vector<CWord>& getWords()    const { return &words; }
+
+            // 含まれる単語のサイズを取得する
             std::vector<CWord>::size_type size()    const { return words.size(); }
+
+            // i 番目の単語への const 参照を直接投げる
+            const CWord& at(std::vector<CWord>::size_type i) const {
+                return words[i];
+            }
+            
+            // at の operator overload 版
+            const CWord& operator[](std::vector<CWord>::size_type i) const {
+                return words[i];
+            }
 
             private:
             const std::vector<CWord> words;    // 単語の配列（元の文章の出現順に保持）
