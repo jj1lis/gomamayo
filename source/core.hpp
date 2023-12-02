@@ -39,8 +39,8 @@ namespace gomamayo{
             using String = std::basic_string<charType>;
 
             public:
-            Word(String _word, String _reading, POS _pos) :
-                word(_word), reading(_reading), moras(splitMora(_reading)), pos(_pos) {}
+            Word(String word, String reading, POS pos) :
+                word(word), reading(reading), moras(splitMora(reading)), pos(pos) {}
 
             // getter
             POS                         getPos()        const { return pos; }
