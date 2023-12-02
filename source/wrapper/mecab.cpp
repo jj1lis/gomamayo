@@ -22,33 +22,48 @@ namespace gomamayo{
             message = (tagger == NULL) ? MeCab::getTaggerError() : tagger->what();
         }
 
-        Text<char>* parseText(const char *text){
+        // text を形態素解析して Text インスタンスでラップして返す
+        Text<char> parseText(const std::string& text){
+
             try{
+                // MeCab パーサを構築する
                 MeCab::Tagger *tagger = MeCab::createTagger("");
                 if(tagger == NULL)
                     throw new MeCabException(tagger);
 
-                const MeCab::Node* node = tagger->parseToNode(text);
+                // text の形態素解析を実行
+                // Node は形態素を表す構造体
+                // Node* Node::next が次の形態素を指している
+                const MeCab::Node* node = tagger->parseToNode(text.c_str());
                 if(node == NULL)
                     throw new MeCabException(tagger);
 
-                auto words = new std::vector<Word<char>*>();    // std::string == std::basic_string<char>
+                auto words = std::vector<Word<char>>();    // std::string == std::basic_string<char>
+
+
+                // 形態素ノードを順番に舐める
                 while(node != NULL){
-                    { //test
-                        #include <iostream>
-                        //std::cout << std::string(node->surface, node->length) << " : " << node->feature << std::endl;
-                    }
-
+                    // 始点終点ノードは除く
                     if(node->stat != MECAB_BOS_NODE && node->stat != MECAB_EOS_NODE){
-                        auto splitted = split<char>(node->feature, ",");
+                        // MeCab の出力はchar*文字列で node->feature に格納されており、
+                        // 各項目は ',' で区切られているので vector にする
+                        std::vector<std::string> splitted = split<char>(node->feature, ",");
 
-                        words->push_back(new Word<char>(new std::string(node->surface, node->length), &(splitted->at(7)), toPOS(splitted->at(0))));
+                        // 単語は node-> surface にある
+                        auto word = std::string(node->surface, node->length);
+                        // 読みは node->feature の8番目の項目
+                        std::string reading = splitted[7];
+                        // 品詞（大分類）は node->feature の1番目の項目
+                        Pos pos = toPOS(splitted[0]);
+
+                        // これらから Word<char> インスタンスを作って追加
+                        words.push_back(Word<char>(std::string(node->surface, node->length), reading, pos));
                     }
 
                     node = node->next;
                 }
 
-                return new Text<char>(words);
+                return Text<char>(words);
 
             } catch(MeCabException e){
                 std::cerr << "Exception: " << e.what() << std::endl;
@@ -56,7 +71,8 @@ namespace gomamayo{
             }
         }
 
-        POS toPOS(const std::string str){
+
+        POS toPOS(const std::string& str){
             if(!str.compare("その他"))
                 return other;
             else if(!str.compare("フィラー"))

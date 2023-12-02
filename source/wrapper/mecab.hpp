@@ -13,8 +13,10 @@
 
 namespace gomamayo{
 
+    // MeCab の文字型は基本的に char
     namespace mecab{
 
+        // MeCab 関連処理限定の例外
         class MeCabException : public std::exception{
             public:
                 MeCabException(const MeCab::Tagger*);
@@ -25,9 +27,11 @@ namespace gomamayo{
                 const char* message;
         };
 
-        Text<char>* parseText(const char*);
+        // 文章を生の文字列で受けて MeCab で形態素解析し、Text インスタンスにして返す
+        Text<char> parseText(const std::string&);
 
-        POS toPOS(const std::string);
+        // MeCab の解析で得た品詞の文字列を Pos にする
+        POS toPOS(const std::string&);
 
     }
 }

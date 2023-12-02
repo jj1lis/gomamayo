@@ -12,6 +12,7 @@
 namespace gomamayo{
 
     // POS: Parts of Speech
+    // 品詞判別用の列挙型
     enum POS{
         other,      // その他
         filler,     // フィラー
@@ -29,46 +30,39 @@ namespace gomamayo{
         unknown,
     };
 
+    
+    // 単語（形態素）クラス
     template<class charType, class traits = std::char_traits<charType>, class Allocator = std::allocator<charType>>
         class Word{
             using String = std::basic_string<charType>;
 
             public:
-            Word(String* word, String* reading, POS pos) : word(word), reading(reading), pos(pos) {}
+            Word(String word, String reading, POS pos) : word(word), reading(reading), pos(pos) {}
 
-            ~Word(){
-                delete word;
-                delete reading;
-            }
-
-            inline POS      getpos()        { return pos; }
-            inline String*  getword()       { return word; }
-            inline String*  getreading()    { return reading; }
+            POS      getpos()       const { return pos; }
+            String*  getword()      const { return word; }
+            String*  getreading()   const { return reading; }
 
             private:
-            String* const word;
-            String* const reading;
-            const POS pos;
+            const String word;                  // 単語（元の表現）
+            const String reading;               // word の読み（カタカナ）
+            const std::vector<String> moras;    // reading のモーラ分割
+            const POS pos;                      // 品詞
         };
 
+
+    // 文章クラス
     template<class charType, class traits = std::char_traits<charType>, class Allocator = std::allocator<charType>>
         class Text{
             using String = std::basic_string<charType>;
 
             public:
-            Text(std::vector<Word<charType>*>* words) : words(words) {}
+            Text(std::vector<Word<charType>> words) : words(words) {}
 
-            ~Text(){
-                for(auto word : *words)
-                    delete word;
-
-                delete words;
-            }
-
-            inline std::vector<Word<charType>*>* getwords() { return words; }
+            std::vector<Word<charType>> getords() { return &words; }
 
             private:
-            std::vector<Word<charType>*>* const words;
+            const std::vector<Word<charType>> words;    // 単語の配列（元の文章の出現順に保持）
         };
 
 }
