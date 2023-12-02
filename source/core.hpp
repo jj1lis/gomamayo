@@ -8,6 +8,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "utils.hpp"
 
 namespace gomamayo{
 
@@ -37,7 +38,7 @@ namespace gomamayo{
             using String = std::basic_string<charType>;
 
             public:
-            Word(String word, String reading, POS pos) : word(word), reading(reading), pos(pos) {}
+            Word(String word, String reading, POS pos) : word(word), reading(reading), moras(splitMora(reading)), pos(pos) {}
 
             POS      getpos()       const { return pos; }
             String*  getword()      const { return word; }
