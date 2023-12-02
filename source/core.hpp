@@ -8,6 +8,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <numeric>
 #include "utils.hpp"
 
 namespace gomamayo{

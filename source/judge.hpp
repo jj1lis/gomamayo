@@ -9,7 +9,6 @@
 
 #include <string>
 #include <vector>
-#include <algorithm>
 
 #include "core.hpp"
 
