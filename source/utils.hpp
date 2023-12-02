@@ -24,10 +24,10 @@ namespace gomamayo{
             if(separator.length() == 0)
                 list.push_back(source);
             else{
-                String::size_type head = 0;   // list に追加する文字列の先頭位置
+                typename String::size_type head = 0;   // list に追加する文字列の先頭位置
 
                 for(;;){
-                    String::size_type position = source.find(separator, head);    // 今回見つけた separator の位置
+                    typename String::size_type position = source.find(separator, head);    // 今回見つけた separator の位置
 
                     // これ以上 sperator がなくなったら残りを全て追加して終了
                     if(position == String::npos){
@@ -76,9 +76,9 @@ namespace gomamayo{
             using String = std::basic_string<charType>;
             auto moras = std::vector<String>();
 
-            for(String::size_type cursor = 0; cursor < reading.size(); cursor++){
+            for(typename String::size_type cursor = 0; cursor < reading.size(); cursor++){
                 // 1文字先読みして、捨て仮名だったら cursor と cursor + 1 で1モーラ
-                if(cursor + 1 < reading.length() && isSutegana(reading[cursor + 1])){
+                if(cursor + 1 < reading.length() && isSutegana(reading.substr(cursor + 1, 1))){
                     moras.push_back(reading.substr(cursor, 2));
                     cursor++;       // for 文のインクリメントと併せて次のループでは捨て仮名の次の文字を読む
                 } else  // 普通は1文字1モーラ

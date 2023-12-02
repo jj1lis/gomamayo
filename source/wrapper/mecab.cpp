@@ -27,7 +27,7 @@ namespace gomamayo{
 
             try{
                 // MeCab パーサを構築する
-                MeCab::Tagger *tagger = MeCab::createTagger("");
+                MeCab::Tagger* tagger = MeCab::createTagger("");
                 if(tagger == NULL)
                     throw new MeCabException(tagger);
 
@@ -47,14 +47,14 @@ namespace gomamayo{
                     if(node->stat != MECAB_BOS_NODE && node->stat != MECAB_EOS_NODE){
                         // MeCab の出力はchar*文字列で node->feature に格納されており、
                         // 各項目は ',' で区切られているので vector にする
-                        std::vector<std::string> splitted = split<char>(node->feature, ",");
+                        std::vector<std::string> splitted = split<char>(std::string(node->feature), ",");
 
                         // 単語は node-> surface にある
                         auto word = std::string(node->surface, node->length);
                         // 読みは node->feature の8番目の項目
                         std::string reading = splitted[7];
                         // 品詞（大分類）は node->feature の1番目の項目
-                        Pos pos = toPOS(splitted[0]);
+                        POS pos = toPOS(splitted[0]);
 
                         // これらから Word<char> インスタンスを作って追加
                         words.push_back(Word<char>(std::string(node->surface, node->length), reading, pos));

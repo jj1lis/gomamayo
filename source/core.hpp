@@ -39,7 +39,8 @@ namespace gomamayo{
             using String = std::basic_string<charType>;
 
             public:
-            Word(String word, String reading, POS pos) : word(word), reading(reading), moras(splitMora(reading)), pos(pos) {}
+            Word(String _word, String _reading, POS _pos) :
+                word(_word), reading(_reading), moras(splitMora(_reading)), pos(_pos) {}
 
             // getter
             POS                         getPos()        const { return pos; }
@@ -48,12 +49,12 @@ namespace gomamayo{
             const std::vector<String>&  getMoras()      const { return &moras; }
 
             // モーラのサイズを取得する
-            std::vector<String>::size_type getMoraSize() const {
+            typename std::vector<String>::size_type getMoraSize() const {
                 return moras.size();
             }
 
             // 読みの先頭 length モーラを取得する
-            String getMoraHead(String::size_type length) const {
+            String getMoraHead(typename String::size_type length) const {
                 // length がモーラ数より大きければ例外を投げる
                 if(length > moras.size()) {
                     // TODO 投げる例外クラスを作る
@@ -64,7 +65,7 @@ namespace gomamayo{
             }
 
             // 読みの末尾 length モーラを取得する
-            String getMoraTail(String::size_type length) const {
+            String getMoraTail(typename String::size_type length) const {
                 // length がモーラ数より大きければ例外を投げる
                 if(length > moras.size()) {
                     // TODO 投げる例外クラスを作る
@@ -90,21 +91,21 @@ namespace gomamayo{
             using CWord     = Word<charType>;
 
             public:
-            Text(std::vector<CWord> words) : words(words) {}
+            Text(typename std::vector<CWord> words) : words(words) {}
 
             // getter
-            const std::vector<CWord>& getWords()    const { return &words; }
+            const std::vector<CWord>& getWords() const { return &words; }
 
             // 含まれる単語のサイズを取得する
-            std::vector<CWord>::size_type size()    const { return words.size(); }
+            typename std::vector<CWord>::size_type size() const { return words.size(); }
 
             // i 番目の単語への const 参照を直接投げる
-            const CWord& at(std::vector<CWord>::size_type i) const {
+            const CWord& at(typename std::vector<CWord>::size_type i) const {
                 return words[i];
             }
             
             // at の operator overload 版
-            const CWord& operator[](std::vector<CWord>::size_type i) const {
+            const CWord& operator[](typename std::vector<CWord>::size_type i) const {
                 return words[i];
             }
 
