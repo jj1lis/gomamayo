@@ -7,26 +7,26 @@
 
 #include <cstddef>
 #include <string>
-#include <map>
+#include <set>
 
 namespace gomamayo {
     
     // 実行時のコマンドラインオプション
     
     enum OptEnum {
-        SepcifyDegree,
+        SpecifyDegree,
         CommandlineTextInput,
         unknown,
     };
 
     struct Option {
         public:
-            const std::map<OptEnum, bool> optionFlags;
+            const std::set<OptEnum> optionFlags;
 
             const size_t degree;
             const std::string commandlineText;
 
-            Option(std::map<OptEnum, bool> optionFlags,
+            Option(std::set<OptEnum> optionFlags,
                     size_t degree = 1, std::string commandlineText = std::string()) :
                 optionFlags(optionFlags), degree(degree), commandlineText(commandlineText) {}
     };
