@@ -5,7 +5,28 @@
  * See also gomamayo/LICENSE.
  */
 
+#include <stdexept>
+
+#include "core.hpp"
+#include "judge.hpp"
+#include "wrapper/mecab.hpp"
+#include "option.hpp"
+
+using namespace std;
+using namespace gomamayo;
 
 int main(int argc, char** argv){
-    // TODO
+    Option option = parseOption(argc, argv);
+
+    try {
+        // 入力がコマンドライン引数の場合
+        if(option.optionFlags.contains(OptEnum::commandlineTextInput)) {
+            // TODO
+        // それ以外（ひたすら入力を受け付けて解析する）
+        } else {
+            // TODO
+        }
+    } catch(exception& e) {
+        cout << e.what();
+    }
 }
