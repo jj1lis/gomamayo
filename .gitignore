@@ -1,2 +1,3 @@
 source/test*
 source/template.cpp
+*.o

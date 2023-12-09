@@ -5,6 +5,8 @@
  * See also gomamayo/LICENSE.
  */
 
+#pragma once
+
 #include <cstddef>
 #include <string>
 #include <set>
@@ -16,7 +18,7 @@ namespace gomamayo {
     enum OptEnum {
         SpecifyDegree,
         CommandlineTextInput,
-        unknown,
+        Unknown,
     };
 
     struct Option {

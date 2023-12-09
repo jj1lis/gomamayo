@@ -18,7 +18,7 @@ namespace gomamayo {
         auto commandlineText = std::string();
 
         auto flags = std::set<OptEnum>();
-        OptEnum option = OptEnum::unknown;
+        OptEnum option = OptEnum::Unknown;
         for(int i = 1; i < argc; i++){
 
             // オプション指定子
@@ -35,12 +35,13 @@ namespace gomamayo {
                 switch(option) {
                     case OptEnum::SpecifyDegree:
                         degree = std::stoi(argv[i]);
-                        option = OptEnum::unknown;
+                        option = OptEnum::Unknown;
                         break;
                     case OptEnum::CommandlineTextInput:
                         commandlineText = std::string(argv[i]);
+                        option = OptEnum::Unknown;
                         break;
-                    case OptEnum::unknown:
+                    case OptEnum::Unknown:
                         throw std::runtime_error("Invalid argument.");
                 }
             }
@@ -50,8 +51,8 @@ namespace gomamayo {
     }
 
     // オプションの指定子（"-", "--" 以降）からOptEnumに変換する
-    OptEnum toOptEnum(const char* const _option) {
-        std::string option(_option);
+    OptEnum toOptEnum(const char* const optionCharStr) {
+        std::string option(optionCharStr);
 
         if(option.compare("input") == 0 || option.compare("i") == 0)
             return OptEnum::CommandlineTextInput;
@@ -59,6 +60,6 @@ namespace gomamayo {
         if(option.compare("degree") == 0 || option.compare("d") == 0)
             return OptEnum::SpecifyDegree;
 
-        return OptEnum::unknown;
+        return OptEnum::Unknown;
     }
 }

@@ -16,16 +16,16 @@ namespace gomamayo{
 
     // text が表す文章から n 次ゴママヨを探す
     template<class charType, class traits = std::char_traits<charType>, class Allocator = std::allocator<charType>>
-        vector<Word<charType>::size_type>
-            judgeGomamayo(Text<charType> text, std::basic_string<charType>::size_type n = 1){
+        std::vector<typename std::vector<Word<charType>>::size_type>
+            judgeGomamayo(Text<charType> text, typename std::basic_string<charType>::size_type n = 1){
 
-                using String = basic_string<charType>;
+                using String = std::basic_string<charType>;
 
                 // ゴママヨが見つかった単語のインデックス（前側）
-                vector<Word<charType>::size_type> gomamayoWordIndexes;
+                std::vector<typename std::vector<Word<charType>>::size_type> gomamayoWordIndexes;
             
                 // i = 0...(size - 1) について、i 番目と i + 1 番目の単語でゴママヨを探す
-                for(std::vector<Word<charType>>::size_type i = 0; i < text.size() - 1; i++){
+                for(typename std::vector<Word<charType>>::size_type i = 0; i < text.size() - 1; i++){
 
                     // i 番目の単語の末尾 n モーラ
                     String now  = text[i].getMoraTail(n);
