@@ -16,26 +16,45 @@
 using namespace std;
 using namespace gomamayo;
 
+void parse(const string& input, Option option) {
+    //debug
+    cout << "degree = " << option.degree << endl;
+
+    Text<char> text = mecab::parseText(input);
+
+    //debug
+    cout << "parse completed." << endl;
+    for(auto& word : text.getWords()) {
+        cout << word.getReading().c_str() << ": size/morasize = " << word.getReading().size() << "/" << word.getMoraSize() << endl;
+        for(const string& mora : word.getMoras()) {
+            cout << mora.c_str() << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+
+    auto gomamayoWordIndexes = judgeGomamayo(text, option.degree);
+
+    for(auto& index: gomamayoWordIndexes)
+        cout << index << endl;
+
+}
+
 int main(int argc, char** argv){
     string input;
 
     Option option = parseOption(argc, argv);
 
-    try {
+    // try {
         // 入力がコマンドライン引数の場合
         if(option.optionFlags.find(OptEnum::CommandlineTextInput) != option.optionFlags.end()) {
-            input = option.commandlineText;
 
-            Text<char> text = mecab::parseText(input);
+            parse(option.commandlineText, option);
 
-            auto gomamayoWordIndexes = judgeGomamayo(text, option.degree);
-
-            for(auto& index: gomamayoWordIndexes)
-                cout << index << endl;
 
         // それ以外（ひたすら入力を受け付けて解析する）
         } else {
-            cout << "gomamayo - Gomamayo Analyzer" << endl
+            cout << "gomamayo - Gomamayo Analyzer (c) 型推栄 @_jj1lis_uec 2023" << endl
                     << "enter 'quit' to exit program." << endl << endl;
 
 
@@ -46,17 +65,12 @@ int main(int argc, char** argv){
                 if(input.compare("quit") == 0 || input.compare("q") == 0)
                     break;
 
-                Text<char> text = mecab::parseText(input);
-
-                auto gomamayoWordIndexes = judgeGomamayo(text, option.degree);
-
-                for(auto& index: gomamayoWordIndexes)
-                    cout << index << endl;
+                parse(input, option);
             }
 
             cout << "Bye." << endl;
         }
-    } catch(exception& e) {
-        cout << e.what();
-    }
+    // } catch(exception& e) {
+    //     cerr << e.what() << endl;
+    // }
 }

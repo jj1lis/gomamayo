@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <numeric>
+#include <stdexcept>
 #include "utils.hpp"
 
 namespace gomamayo{
@@ -44,9 +45,9 @@ namespace gomamayo{
 
             // getter
             POS                         getPos()        const { return pos; }
-            const String&               getWord()       const { return &word; }
-            const String&               getReading()    const { return &reading; }
-            const std::vector<String>&  getMoras()      const { return &moras; }
+            const String&               getWord()       const { return word; }
+            const String&               getReading()    const { return reading; }
+            const std::vector<String>&  getMoras()      const { return moras; }
 
             // モーラのサイズを取得する
             typename std::vector<String>::size_type getMoraSize() const {
@@ -58,6 +59,8 @@ namespace gomamayo{
                 // length がモーラ数より大きければ例外を投げる
                 if(length > moras.size()) {
                     // TODO 投げる例外クラスを作る
+
+                    throw std::runtime_error("specified mora length is bigger than word.");
                 } 
 
                 // 先頭から length モーラを結合して返す
@@ -69,6 +72,8 @@ namespace gomamayo{
                 // length がモーラ数より大きければ例外を投げる
                 if(length > moras.size()) {
                     // TODO 投げる例外クラスを作る
+
+                    throw std::runtime_error("specified mora length is bigger than word.");
                 } 
 
                 // 先頭から length モーラを結合して返す
@@ -94,7 +99,7 @@ namespace gomamayo{
             Text(typename std::vector<CWord> words) : words(words) {}
 
             // getter
-            const std::vector<CWord>& getWords() const { return &words; }
+            const std::vector<CWord>& getWords() const { return words; }
 
             // 含まれる単語のサイズを取得する
             typename std::vector<CWord>::size_type size() const { return words.size(); }

@@ -14,6 +14,9 @@
 #include "../core.hpp"
 #include "../utils.hpp"
 
+//debug
+using namespace std;
+
 namespace gomamayo{
 
     namespace mecab{
@@ -47,12 +50,21 @@ namespace gomamayo{
                     if(node->stat != MECAB_BOS_NODE && node->stat != MECAB_EOS_NODE){
                         // MeCab の出力はchar*文字列で node->feature に格納されており、
                         // 各項目は ',' で区切られているので vector にする
+
                         std::vector<std::string> splitted = split<char>(std::string(node->feature), ",");
 
                         // 単語は node-> surface にある
                         auto word = std::string(node->surface, node->length);
+
                         // 読みは node->feature の8番目の項目
-                        std::string reading = splitted[7];
+                        // ただしカタカナの場合は node->feature は7番目までしか出力されないので、その場合は word そのものを読みとする
+                        std::string reading;
+                        if(splitted.size() <= 7) {
+                            reading = word;
+                        } else {
+                            reading = splitted[7];
+                        }
+
                         // 品詞（大分類）は node->feature の1番目の項目
                         POS pos = toPOS(splitted[0]);
 
