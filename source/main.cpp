@@ -8,6 +8,9 @@
 #include <iostream>
 #include <stdexcept>
 
+// 日本語対応に時間が掛かるのでとりあえず応急処置
+#include <clocale>
+
 #include "core.hpp"
 #include "judge.hpp"
 #include "wrapper/mecab.hpp"
@@ -17,35 +20,36 @@ using namespace std;
 using namespace gomamayo;
 
 void parse(const string& input, Option option) {
-    //debug
-    cout << "degree = " << option.degree << endl;
+    Text<wchar_t> text = mecab::parseText(input);
 
-    Text<char> text = mecab::parseText(input);
-
-    //debug
-    cout << "parse completed." << endl;
-    for(auto& word : text.getWords()) {
-        cout << word.getReading().c_str() << ": size/morasize = " << word.getReading().size() << "/" << word.getMoraSize() << endl;
-        for(const string& mora : word.getMoras()) {
-            cout << mora.c_str() << " ";
+    if(option.optionFlags.find(OptEnum::Verbose) != option.optionFlags.end()) {
+        for(auto& word : text.getWords()) {
+            wcout << word.getReading().c_str() << L": length/mora length = " << word.getReading().size() << L"/" << word.getMoraSize() << L": ";
+            for(const wstring& mora : word.getMoras()) {
+                wcout << mora.c_str() << L" ";
+            }
+            wcout << endl;
         }
-        cout << endl;
+        wcout << endl;
     }
-    cout << endl;
 
     auto gomamayoWordIndexes = judgeGomamayo(text, option.degree);
 
-    for(auto& index: gomamayoWordIndexes)
-        cout << index << endl;
+    for(auto& index: gomamayoWordIndexes) {
+        wcout << text[index].getWord() << text[index + 1].getWord() << L"⁉️" << endl;
+    }
 
 }
 
 int main(int argc, char** argv){
+    // ロケールを日本語の UTF-8 にセット
+    setlocale(LC_CTYPE, "ja_JP.UTF-8");
+
     string input;
 
     Option option = parseOption(argc, argv);
 
-    // try {
+    try {
         // 入力がコマンドライン引数の場合
         if(option.optionFlags.find(OptEnum::CommandlineTextInput) != option.optionFlags.end()) {
 
@@ -54,12 +58,12 @@ int main(int argc, char** argv){
 
         // それ以外（ひたすら入力を受け付けて解析する）
         } else {
-            cout << "gomamayo - Gomamayo Analyzer (c) 型推栄 @_jj1lis_uec 2023" << endl
-                    << "enter 'quit' to exit program." << endl << endl;
+            wcout << L"gomamayo - Gomamayo Analyzer (c) 型推栄 @_jj1lis_uec 2023" << endl
+                    << L"enter 'quit' or 'q' to exit program." << endl << endl;
 
 
             while(true) {
-                cout << "text > ";
+                wcout << L"text > ";
                 cin >> input;
 
                 if(input.compare("quit") == 0 || input.compare("q") == 0)
@@ -70,7 +74,7 @@ int main(int argc, char** argv){
 
             cout << "Bye." << endl;
         }
-    // } catch(exception& e) {
-    //     cerr << e.what() << endl;
-    // }
+    } catch(exception& e) {
+        cerr << e.what() << endl;
+    }
 }

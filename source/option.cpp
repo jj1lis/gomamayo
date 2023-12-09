@@ -40,17 +40,15 @@ namespace gomamayo {
                     case OptEnum::SpecifyDegree:
                         degree = std::stoi(argv[i]);
                         option = OptEnum::Unknown;
-                        // //debug
-                        // cout << degree << endl;
                         break;
                     case OptEnum::CommandlineTextInput:
                         commandlineText = std::string(argv[i]);
                         option = OptEnum::Unknown;
-                        // //debug
-                        // cout << commandlineText.c_str() << endl;
                         break;
                     case OptEnum::Unknown:
                         throw std::runtime_error("Invalid option or argument.");
+                    default:
+                        ;   // nop （引数を持たないオプションに引数が渡されたときは無視する： e.g. "--verbose hoge"）
                 }
             }
         }
@@ -63,15 +61,15 @@ namespace gomamayo {
         std::string option(optionCharStr);
 
         if(option.compare("input") == 0 || option.compare("i") == 0) {
-            // //debug
-            // cout << "option input:" << endl;
             return OptEnum::CommandlineTextInput;
         }
 
         if(option.compare("degree") == 0 || option.compare("d") == 0) {
-            // //debug
-            // cout << "option degree:" << endl;
             return OptEnum::SpecifyDegree;
+        }
+
+        if(option.compare("verbose") == 0 || option.compare("v") == 0) {
+            return OptEnum::Verbose;
         }
 
         return OptEnum::Unknown;

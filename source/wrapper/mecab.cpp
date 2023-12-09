@@ -10,6 +10,7 @@
 #include <mecab.h>
 #include <string>
 #include <cstdlib>
+
 #include "mecab.hpp"
 #include "../core.hpp"
 #include "../utils.hpp"
@@ -26,7 +27,7 @@ namespace gomamayo{
         }
 
         // text を形態素解析して Text インスタンスでラップして返す
-        Text<char> parseText(const std::string& text){
+        Text<wchar_t> parseText(const std::string& text){
 
             try{
                 // MeCab パーサを構築する
@@ -41,7 +42,7 @@ namespace gomamayo{
                 if(node == NULL)
                     throw new MeCabException(tagger);
 
-                auto words = std::vector<Word<char>>();    // std::string == std::basic_string<char>
+                auto words = std::vector<Word<wchar_t>>();
 
 
                 // 形態素ノードを順番に舐める
@@ -68,14 +69,26 @@ namespace gomamayo{
                         // 品詞（大分類）は node->feature の1番目の項目
                         POS pos = toPOS(splitted[0]);
 
-                        // これらから Word<char> インスタンスを作って追加
-                        words.push_back(Word<char>(std::string(node->surface, node->length), reading, pos));
+                        // MeCab の出力は char だが、マルチバイト文字だと扱いが難しいのでワイド文字にしたい
+                        // よって word, reading を wchar_t に変換する
+                        std::basic_string<wchar_t> wideWord, wideReading;
+
+                        wchar_t* wideWordBuf    = new wchar_t[3 * word.size()];
+                        wchar_t* wideReadingBuf = new wchar_t[3 * reading.size()];
+                        mbstowcs(wideWordBuf, word.c_str(), 3 * word.size());
+                        mbstowcs(wideReadingBuf, reading.c_str(), 3 * reading.size());
+
+                        wideWord    = std::basic_string<wchar_t>(wideWordBuf);
+                        wideReading = std::basic_string<wchar_t>(wideReadingBuf);
+
+                        // これらから Word<wchar_t> インスタンスを作って追加
+                        words.push_back(Word<wchar_t>(wideWord, wideReading, pos));
                     }
 
                     node = node->next;
                 }
 
-                return Text<char>(words);
+                return Text<wchar_t>(words);
 
             } catch(MeCabException e){
                 std::cerr << "Exception: " << e.what() << std::endl;

@@ -49,21 +49,21 @@ namespace gomamayo{
     template<class charType, class traits = std::char_traits<charType>, class Allocator = std::allocator<charType>>
         bool isSutegana(const std::basic_string<charType>& kana){
 
-            if(!kana.compare("ャ"))
+            if(!kana.compare(L"ャ"))
                 return true;
-            else if(!kana.compare("ュ"))
+            else if(!kana.compare(L"ュ"))
                 return true;
-            else if(!kana.compare("ョ"))
+            else if(!kana.compare(L"ョ"))
                 return true;
-            else if(!kana.compare("ァ"))
+            else if(!kana.compare(L"ァ"))
                 return true;
-            else if(!kana.compare("ィ"))
+            else if(!kana.compare(L"ィ"))
                 return true;
-            else if(!kana.compare("ゥ"))
+            else if(!kana.compare(L"ゥ"))
                 return true;
-            else if(!kana.compare("ェ"))
+            else if(!kana.compare(L"ェ"))
                 return true;
-            else if(!kana.compare("ォ"))
+            else if(!kana.compare(L"ォ"))
                 return true;
             else
                 return false;

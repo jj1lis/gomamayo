@@ -18,6 +18,7 @@ namespace gomamayo {
     enum OptEnum {
         SpecifyDegree,
         CommandlineTextInput,
+        Verbose,
         Unknown,
     };
 

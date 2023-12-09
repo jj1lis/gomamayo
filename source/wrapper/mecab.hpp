@@ -28,9 +28,9 @@ namespace gomamayo{
         };
 
         // 文章を生の文字列で受けて MeCab で形態素解析し、Text インスタンスにして返す
-        Text<char> parseText(const std::string&);
+        Text<wchar_t> parseText(const std::string&);
 
-        // MeCab の解析で得た品詞の文字列を Pos にする
+        // MeCab の解析で得た品詞の文字列を POS にする
         POS toPOS(const std::string&);
 
     }
